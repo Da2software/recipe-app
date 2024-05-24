@@ -2,9 +2,7 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from passlib.hash import bcrypt
 from sqlalchemy.orm import relationship
 
-from .db_manager import SQLiteORM
-
-Base = SQLiteORM().get_base()
+from .db_manager import Base
 
 
 class User(Base):
