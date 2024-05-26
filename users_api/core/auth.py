@@ -89,6 +89,7 @@ async def create_user(db: db_dependency, request: CreateUserRequest):
 
     db.add(new_user)
     db.commit()
+    return {"message": f"User {new_user.user_name} successful created!"}
 
 
 @router.post("/token", response_model=Token)
@@ -101,5 +102,3 @@ async def login_for_access_token(
                             detail='Could not validate user.')
     token = create_access_token(user.user_name, user.id, timedelta(minutes=20))
     return {'access_token': token, 'token_type': 'bearer'}
-
-

@@ -163,3 +163,4 @@ cython_debug/
 
 RecipeNLG_dataset.csv
 env.cfg
+*.db

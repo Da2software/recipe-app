@@ -4,7 +4,7 @@ from core import models
 from core.database import engine
 import uvicorn
 
-app = FastAPI()
+app = FastAPI(title="Recipe Users API")
 app.include_router(auth.router)
 app.include_router(users.router)
 
