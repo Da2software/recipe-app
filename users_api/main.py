@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from core import auth, users
-from core import models
+from core import models, utils
 from core.database import engine
 import uvicorn
 
 app = FastAPI(title="Recipe Users API")
+app.add_middleware(utils.SessionMiddleware)
 app.include_router(auth.router)
 app.include_router(users.router)
 

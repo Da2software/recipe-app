@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: rgb(241, 212, 114);
+  --background-end-rgb: rgb(219, 142, 118);
+  --color-default: #aaa890;
+  --color-primary: #F5A623;
+  --color-secondary: #F8E71C;
+  --color-accent: #9B51E0;
+  --color-background: #333333;
+  --color-text: #FFFFFF;
+}
+
+body {
+  min-height: 100vh;
+  color: rgb(var(--color-text));
+  background: linear-gradient(to bottom,
+      var(--background-start-rgb),
+      var(--background-end-rgb));
+}
+
+.fit-width {
+  width: fit-content;
+}
+.vh-100 {
+  height: 100vh;
+}
+.h-auto {
+  height: auto;
+}
+.h-100 {
+  height: 100%;
+}
+.h-50 {
+  height: 50%;
+}
+
+.w-auto {
+  width: auto;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-90 {
+  width: 90%;
+}
+
+.w-80 {
+  width: 80%;
+}
+
+.w-70 {
+  width: 70%;
+}
+
+.w-50 {
+  width: 50%;
+}
+
+.login-img {}
+
+@media (min-width: 1300px) {
+  .login-img {
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (min-width: 800px) and (max-width: 1300px) {
+  .login-img {
+    width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (min-width: 0px) and (max-width: 800px) {
+
+  .login-img {
+    height: 250px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* .rp-title {
+  color: var(--color-text);
+  font-size: 50px;
+}
+.rp-button{
+  background-color: var(--color-default);
+  border-radius: 15px;
+  padding: 0.5rem 0.2rem;
+}
+.rp-button.primary {
+  background-color: var(--color-primary);
+}
+
+@media (min-width: 1000px) {
+  .rp-login{
+    max-width: 50%;
+  }
+}
+@media (min-width: 500px) and (max-width: 1000px) {
+  .rp-login{
+    max-width: 50%;
+  }
+}
+@media (min-width: 0px) and (max-width: 500px) {
+  .rp-login{
+    max-width: 300px;
+  }
+} */

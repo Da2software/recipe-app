@@ -30,3 +30,7 @@ then we can run the container
 ```bash
 docker run --name mongodb -p 27017:27017 -d mongodb/mongodb-community-server:5.0-ubuntu2004
 ```
+
+## recipes_frontend
+
+> node 20.13.1 version required

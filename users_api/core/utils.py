@@ -1,5 +1,7 @@
 from .interfaces import SingletonMeta
 from pathlib import Path
+from fastapi import Request, Response
+from starlette.middleware.base import BaseHTTPMiddleware
 import configparser
 import os
 
@@ -35,3 +37,15 @@ class EnvManager(metaclass=SingletonMeta):
             config = configparser.ConfigParser()
             config.read(file_path)
             self.env = config['Settings']
+
+
+class SessionMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        session_cookie = request.cookies.get("session_token")
+        if session_cookie:
+            # Set the Authorization header
+            request.headers.__dict__["_list"].append(
+                (b"authorization", f"Bearer {session_cookie}".encode())
+            )
+        response = await call_next(request)
+        return response
