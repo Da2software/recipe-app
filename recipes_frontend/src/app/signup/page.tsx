@@ -12,73 +12,55 @@ import {
   Grid,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { IUserState, addUser } from "../userSlice";
+import { json } from "stream/consumers";
 
-export default function Login() {
+export default function SignUp() {
   const [showPass, setShowPass] = React.useState(false);
   const [username, setUsername] = React.useState('');
+  const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [vPassword, setVPassword] = React.useState('');
   const router = useRouter();
-  const dispatch = useDispatch()
 
   const handleChangeShowPass = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowPass(event.target.checked);
   };
-  const setUserState = ()=>{
-    fetch(process.env.USERS_API + "/auth/", {
-      method: "GET",
-      credentials: "same-origin",
-    }).then((res) => {
-      if (res.ok) {
-        const body: any = res.body;
-        const userRes: IUserState = {
-          username: body["user_name"],
-          email: body["email"],
-          isAuth: true,
-        };
-        dispatch(addUser(userRes));
-      } else {
-        console.warn("User not authenticated!");
-      }
-    });
-    
-  };
-  const onLogin = async (event: React.FormEvent) => {
+  const onSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
+    const body = {
+      username: username,
+      email: email,
+      password: password,
+    };
 
-    const response = await fetch(process.env.USERS_API + "/auth/token", {
+    const response = await fetch(process.env.USERS_API + "/auth/signup", {
       method: "POST",
       credentials: "same-origin",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: new URLSearchParams({
-        username: username,
-        password: password,
-      }),
+      body: JSON.stringify(body),
     });
 
     if (response.ok) {
-      setUserState();
-      router.push("/dashboard");
+      router.push("/login");
     } else {
-      alert("Login failed");
+      alert("Sign Up failed");
     }
   };
   return (
-    <form action="login" id="login-form" onSubmit={(e) => onLogin(e)}>
+    <form action="login" id="login-form" onSubmit={(e) => onSignUp(e)}>
       <Grid container className="px-2 w-100">
         <Grid item xs={12} sm={8} md={6} lg={4} xl={3} className="m-auto">
           <Card className="my-5" variant="outlined">
             <CardContent>
               <img
-                src={"/assets/login.jpeg"}
+                src={"/assets/signup.jpeg"}
                 alt="login-image"
                 className="login-img"
               />
               <Typography variant="h3" gutterBottom className="text-center">
-                Login
+                Sign Up
               </Typography>
               <div className="grid grid-cols-1 rp-login mx-auto">
                 <TextField
@@ -92,6 +74,16 @@ export default function Login() {
                   onChange={(e) => setUsername(e.target.value)}
                 />
                 <TextField
+                  id="email"
+                  label="Email"
+                  variant="filled"
+                  placeholder="Email"
+                  required
+                  className="my-2"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <TextField
                   id="password"
                   label="Password"
                   type={showPass ? "text" : "password"}
@@ -100,6 +92,17 @@ export default function Login() {
                   className="my-2"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <TextField
+                  id="check_password"
+                  label="Verify Password"
+                  type={showPass ? "text" : "password"}
+                  variant="filled"
+                  placeholder="Verify password"
+                  className="my-2"
+                  value={vPassword}
+                  onChange={(e) => setVPassword(e.target.value)}
                   required
                 />
                 <FormControlLabel
@@ -115,16 +118,17 @@ export default function Login() {
             </CardContent>
             <CardActions className="w-100">
               <div className="flex mb-3 w-100 px-2">
-                <Button variant="contained" type="submit" id="btn-login">
-                  Login
+                <Button variant="contained" type="submit" onSubmit={onSignUp}>
+                  Sign Up
                 </Button>
                 <Button
                   variant="contained"
+                  id="btn-login"
                   color="secondary"
                   className="ms-auto"
-                  onClick={(e) => router.push("/signup")}
+                  onClick={(e) => router.push("/login")}
                 >
-                  Sign Up
+                  Login
                 </Button>
               </div>
             </CardActions>

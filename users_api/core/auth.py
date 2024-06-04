@@ -64,17 +64,19 @@ def create_access_token(username: str, user_id: int, expires_delta: timedelta):
     return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
-def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
+@router.get("/")
+def get_current_user(token: Annotated[str, Depends(oauth2_bearer)],
+                     db: db_dependency):
     no_valid_user_except = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail='Could not validate user.')
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get('sub')
         user_id: str = payload.get('id')
-        if username is None or user_id is None:
+        user: Users = db.query(Users).filter(Users.id == user_id).first()
+        if user is None:
             raise no_valid_user_except
-        return {'username': username, 'id': user_id}
+        return {'username': user.user_name, 'id': user_id, 'email': user.email}
     except JWTError:
         raise no_valid_user_except
 

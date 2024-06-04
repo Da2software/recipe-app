@@ -1,10 +1,23 @@
 from fastapi import FastAPI
 from core import auth, users
+from fastapi.middleware.cors import CORSMiddleware
 from core import models, utils
 from core.database import engine
 import uvicorn
 
+env = utils.EnvManager()
+
+origins = env.get_env("ORIGINS", [])
+
 app = FastAPI(title="Recipe Users API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.add_middleware(utils.SessionMiddleware)
 app.include_router(auth.router)
 app.include_router(users.router)
