@@ -5,10 +5,9 @@ from core.utils import EnvManager
 
 env = EnvManager()
 
-SQLALCHEMY_DATABASE_URL = env.get_env("SQL_DB")
+SQLALCHEMY_DATABASE_URL = connection_string = f'postgresql+psycopg2://{env.get_env("SQL_USER")}:{env.get_env("SQL_PASS")}@{env.get_env("SQL_HOST")}/{env.get_env("SQL_DB")}'
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL,
-                       connect_args={"check_same_thread": False})
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

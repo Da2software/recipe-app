@@ -8,7 +8,7 @@ from core.auth import get_current_user, bcrypt_context
 from core.emailer import send_email
 from typing import Any
 from uuid import uuid4
-from core.utils import EnvManager
+from core.utils import EnvManager, check_login
 import datetime
 
 env = EnvManager()
@@ -29,12 +29,6 @@ def get_db():
 
 db_dependency = Annotated[Session, Depends(get_db)]
 auth_dependency = Annotated[dict, Depends(get_current_user)]
-
-
-def check_login(user):
-    if user is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail='Authenticated Failed!')
 
 
 def create_token_pass(user: Users, db: Session):

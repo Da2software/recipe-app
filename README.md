@@ -1,6 +1,11 @@
 # RECIPE APP (WIP)
 This project is focused on improving my skills with GraphQL and FastAPI.
 
+### requirements
+- python
+- nvm or nodejs v20.13.1
+- docker
+
 ## API
 there are two APIs that we need to start recipes_api and users_api, each one requires a python environment, you will need to run the next commands to setup the environment.
 >required python 3.10.10+
@@ -18,7 +23,18 @@ venv\Scripts\activate    # for windows
 
 ## Databases in DEV mode
 ### users_api databases
-for dev mode I'm using SQLite, no configuration needed.
+for the database we are using postgres.
+
+Run this command:
+```bash
+sudo docker pull postgres
+```
+Now run the container in daemon mode (to be persistent and do not lose the data).
+```bash
+sudo docker run --name postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
+
+```
+Then you will need to use an database admin program and create a new database call `user_app`
 
 ### recipes_api databases
 > required docker

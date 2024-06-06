@@ -1,6 +1,6 @@
 from datetime import timedelta, datetime
 from typing import Annotated, Any
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Response, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from starlette import status
@@ -106,3 +106,9 @@ async def login_for_access_token(
     token = create_access_token(user.user_name, user.id, timedelta(minutes=20))
     response.set_cookie(key="session_token", value=token)
     return {'access_token': token, 'token_type': 'bearer'}
+
+
+@router.get("/logout")
+async def logout(response: Response):
+    response.delete_cookie("session_token")
+    return {"message": "logout successful!"}

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from core import auth, users
+from core import auth, users, comments
 from fastapi.middleware.cors import CORSMiddleware
 from core import models, utils
 from core.database import engine
@@ -21,6 +21,7 @@ app.add_middleware(
 app.add_middleware(utils.SessionMiddleware)
 app.include_router(auth.router)
 app.include_router(users.router)
+app.include_router(comments.router)
 
 models.Base.metadata.create_all(bind=engine)
 

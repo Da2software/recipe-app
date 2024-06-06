@@ -1,4 +1,5 @@
 from .interfaces import SingletonMeta
+from fastapi import HTTPException
 from pathlib import Path
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -49,3 +50,9 @@ class SessionMiddleware(BaseHTTPMiddleware):
             )
         response = await call_next(request)
         return response
+
+
+def check_login(user):
+    if user is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                            detail='Authenticated Failed!')

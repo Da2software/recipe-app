@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,16 +8,22 @@ import Typography from '@mui/material/Typography';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import Link from 'next/link';
 
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { changeAuth } from '@/app/userSlice';
+
 
 
 export default function LoginMenu() {
+  const router = useRouter();
+  const dispatch = useDispatch()
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -36,6 +42,21 @@ export default function LoginMenu() {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
+  };
+  const onLogout = ()=>{
+    fetch(process.env.USERS_API + "/auth/logout", {
+      method: "GET",
+      credentials: "same-origin",
+    }).then((res) => {
+      if (res.ok) {
+        dispatch(changeAuth(false));
+        handleMenuClose();
+        router.push("/");
+      } else {
+        console.warn("Can't logout!");
+      }
+    });
+
   };
 
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -60,7 +81,7 @@ export default function LoginMenu() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={onLogout}>Logout</MenuItem>
     </Menu>
   );
 

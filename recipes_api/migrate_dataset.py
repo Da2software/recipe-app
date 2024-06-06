@@ -22,6 +22,7 @@ def inset_collection(chunk):
             'title': item['title'],
             'ingredients': json.loads(item['ingredients']),
             'directions': json.loads(item['directions']),
+            'image': '',
             'NER': json.loads(item['NER'])
         })
     collection.insert_many(new_items)
@@ -30,7 +31,7 @@ def inset_collection(chunk):
 
 def run():
     num_threads = 4
-    documents = df[0:1001]
+    documents = df[0:2001]
     chunk_size = len(documents) // num_threads
     chunks = [documents[i:i + chunk_size] for i in
               range(0, len(documents), chunk_size)]
