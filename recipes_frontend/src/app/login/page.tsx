@@ -13,58 +13,28 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { IUserState, addUser } from "../userSlice";
+import { UserController } from "@/api/userApi";
+
 
 export default function Login() {
   const [showPass, setShowPass] = React.useState(false);
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const router = useRouter();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const userController = new UserController();
 
   const handleChangeShowPass = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowPass(event.target.checked);
   };
-  const setUserState = ()=>{
-    fetch(process.env.USERS_API + "/auth/", {
-      method: "GET",
-      credentials: "same-origin",
-    }).then((res) => {
-      if (res.ok) {
-        const body: any = res.body;
-        const userRes: IUserState = {
-          username: body["user_name"],
-          email: body["email"],
-          isAuth: true,
-        };
-        dispatch(addUser(userRes));
-      } else {
-        console.warn("User not authenticated!");
-      }
-    });
-    
-  };
   const onLogin = async (event: React.FormEvent) => {
     event.preventDefault();
-
-    const response = await fetch(process.env.USERS_API + "/auth/token", {
-      method: "POST",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        username: username,
-        password: password,
-      }),
+    // TODO: Add a global Snackbar/Toaster for alerts
+    userController.login(username, password, dispatch).then((res) => {
+      if (res.status) {
+        router.push("/dashboard");
+      }
     });
-
-    if (response.ok) {
-      setUserState();
-      router.push("/dashboard");
-    } else {
-      alert("Login failed");
-    }
   };
   return (
     <form action="login" id="login-form" onSubmit={(e) => onLogin(e)}>

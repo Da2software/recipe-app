@@ -1,28 +1,27 @@
-import * as React from 'react';
+import * as React from "react";
 
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import Link from 'next/link';
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Badge from "@mui/material/Badge";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import MailIcon from "@mui/icons-material/Mail";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import MoreIcon from "@mui/icons-material/MoreVert";
+import Link from "next/link";
 
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { changeAuth } from '@/app/userSlice';
-
-
+import { UserController } from "@/api/userApi";
 
 export default function LoginMenu() {
   const router = useRouter();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const userController = new UserController();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
@@ -43,39 +42,30 @@ export default function LoginMenu() {
     setAnchorEl(null);
     handleMobileMenuClose();
   };
-  const onLogout = ()=>{
-    fetch(process.env.USERS_API + "/auth/logout", {
-      method: "GET",
-      credentials: "same-origin",
-    }).then((res) => {
-      if (res.ok) {
-        dispatch(changeAuth(false));
-        handleMenuClose();
-        router.push("/");
-      } else {
-        console.warn("Can't logout!");
-      }
+  const onLogout = () => {
+    userController.logout(dispatch).then(() => {
+      handleMenuClose();
+      router.push("/");
     });
-
   };
 
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
-  const menuId = 'primary-login-menu-account-menu';
+  const menuId = "primary-login-menu-account-menu";
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       id={menuId}
       keepMounted
       transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       open={isMenuOpen}
       onClose={handleMenuClose}
@@ -85,19 +75,19 @@ export default function LoginMenu() {
     </Menu>
   );
 
-  const mobileMenuId = 'primary-login-menu-account-menu-mobile';
+  const mobileMenuId = "primary-login-menu-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       id={mobileMenuId}
       keepMounted
       transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
+        vertical: "top",
+        horizontal: "right",
       }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
@@ -148,7 +138,7 @@ export default function LoginMenu() {
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton
+            {/* <IconButton
               size="large"
               aria-label="show 4 new mails"
               color="inherit"
@@ -156,7 +146,7 @@ export default function LoginMenu() {
               <Badge badgeContent={4} color="error">
                 <MailIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <IconButton
               size="large"
               aria-label="show 17 new notifications"

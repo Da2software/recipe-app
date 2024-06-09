@@ -3,6 +3,7 @@ from core.utils import EnvManager
 from database.db_clients import MongoDatabase
 import pandas as pd
 import threading
+from datetime import datetime
 
 ENV = EnvManager()
 
@@ -18,12 +19,16 @@ collection = db[ENV.get_env("MONGO_COLLECTION")]
 def inset_collection(chunk):
     new_items = []
     for idx, item in chunk.iterrows():
+        current_time = datetime.utcnow()
         new_items.append({
             'title': item['title'],
             'ingredients': json.loads(item['ingredients']),
             'directions': json.loads(item['directions']),
-            'image': '',
-            'NER': json.loads(item['NER'])
+            'description': 'This delightful dish offers a symphony of flavors that dance on your palate. Each bite brings a harmonious blend of textures and aromas, leaving you craving more. Perfect for any occasion, it promises to be a memorable culinary experience that will delight all who taste it.',
+            'image': 'https://copilot.microsoft.com/images/create/a-dish-with-a-very-tasty-food-in-hyper-realistic-s/1-66648c1ea69f4fe08635a7be4c58acea?id=eCbN7DP7gwpLzRK8%2bbnFrg%3d%3d&view=detailv2&idpp=genimg&idpclose=1&thId=OIG4.TgwL..JLzgTwAJQjubgl&FORM=SYDBIC',
+            'NER': json.loads(item['NER']),
+            'created_at': current_time,
+            'updated_at': current_time
         })
     collection.insert_many(new_items)
     print(f'{len(new_items)} added.')

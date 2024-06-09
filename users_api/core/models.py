@@ -2,6 +2,7 @@ from core.database import Base
 import datetime
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
 from sqlalchemy import Text
+from sqlalchemy.orm import relationship
 
 
 class Users(Base):
@@ -29,15 +30,16 @@ class Comments(Base):
                         nullable=False)
     updated_at = Column(DateTime, default=datetime.datetime.utcnow,
                         nullable=False)
+    user = relationship(Users, backref='comments')
 
 
 class StarsRecipe(Base):
-    __tablename__ = "starts_recipe"
+    __tablename__ = "stars_recipe"
 
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-    recipe_id = Column(String, nullable=False)
+    recipe_id = Column(String, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
     stars = Column(Integer, default=0)
+    user = relationship(Users, backref='stars_recipe')
 
 
 class PassTokens(Base):

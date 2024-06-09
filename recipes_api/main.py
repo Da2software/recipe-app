@@ -7,7 +7,8 @@ from core.utils import EnvManager
 ENV = EnvManager()
 
 app = Flask(__name__)
-CORS(app)
+origins = ENV.get_env("ORIGINS").split(",")
+CORS(app, resources={r"/graphql": {"origins": origins}})
 
 app.add_url_rule(
     '/graphql',

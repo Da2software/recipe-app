@@ -41,6 +41,7 @@ class EnvManager(metaclass=SingletonMeta):
 
 
 class SessionMiddleware(BaseHTTPMiddleware):
+    """Used to get the cookie and set the session automatically"""
     async def dispatch(self, request, call_next):
         session_cookie = request.cookies.get("session_token")
         if session_cookie:

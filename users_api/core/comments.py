@@ -53,7 +53,11 @@ async def get_comment(db: db_dependency, recipe_id: str):
         if comment.comment_id is not None:
             sub_comments = comment_groups.get(comment.comment_id, [])
             sub_comments.append(comment)
+            setattr(comment, "owner", {"username": comment.user.user_name,
+                                       "id": comment.user.id,
+                                       "email": comment.user.email})
             comment_groups[comment.comment_id] = sub_comments
+
     # move sub comments to each parent
     res = []
     for item in comments:
@@ -62,6 +66,9 @@ async def get_comment(db: db_dependency, recipe_id: str):
             continue
         elif comment.id in comment_groups:
             setattr(comment, "replies", comment_groups[comment.id])
+        setattr(comment, "owner", {"username": comment.user.user_name,
+                                   "id": comment.user.id,
+                                   "email": comment.user.email})
         res.append(comment)
     return res
 
@@ -69,6 +76,7 @@ async def get_comment(db: db_dependency, recipe_id: str):
 @router.post("/", status_code=status.HTTP_200_OK)
 async def add_comment(db: db_dependency, user: auth_dependency,
                       request: CommentRequest):
+    # TODO: validated if comment_id is not sub already
     check_login(user)
     kargs = {
         "recipe_id": request.recipe_id,

@@ -31,7 +31,7 @@ export default function RootLayout({
         <body className={inter.className}>
           <ThemeProviderContainer>
             <Navbar></Navbar>
-            {children}
+            <div className="route-content">{children}</div>
           </ThemeProviderContainer>
         </body>
       </html>

@@ -65,7 +65,9 @@ body {
 .home3-img {
   height: 300px;
 }
-
+.route-content{
+  margin-top: 5px;
+}
 
 @media (min-width: 1300px) {
   .login-img {
